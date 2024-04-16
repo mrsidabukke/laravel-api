@@ -1,0 +1,57 @@
+1.disini kita menggunakan jwt untuk melakukan autentifikasi pada laravel api (jason web token)
+   untuk mengencode data data yang dibutuhkan menjadi sebuah token
+   file jwt ada dibawah folder config
+
+2.untuk membuat jwt pada laravel
+composer require tymon/jwt-auth
+
+php artisan vendor:publish --provider="Tymon\JWTAu
+th\Providers\LaravelServiceProvider"
+
+3.untuk membuat secret keynya
+php artisan jwt:secret
+
+4. pastikan untuk membuat array api pada folder config/auth pada autintificartion guard 'web' provider user
+   'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+     
+    ],
+
+5. untuk melihat siapa user yang sedang terauthtentifikasi atau sedang login bisa menggunakan cara
+yang pertama menggunakan
+http://localhost:8000/api/auth/me? token=(lalu tokennya)
+
+cara kedua bissa menggunakan authentification langsung dari postman lalu pilih
+type bearer token lalu isi dengan token user
+
+6.jika ingin membuat controller yang menggunakan api jangan lupa menambahkan --api
+php artisan make:controller ForumController --api 
+perbedaanya --api tidak memasukan view
+
+7.jika ingin mengupdate menggunakan postman harus memasukan _method pada keynya dengan value PUT
+
+8.jika ingin mendelete pada keynya dibuat _method lalu valuenya delete . 
+
+9. refresh adalah metode untuk membuat token baru lalu mematikan token yang lama
+cara mengaktifkannya adlah dengan pergi ke auth controller lalu
+public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh(true, true));
+    }
+    ubah kodenya sepereti kode diatas
+    lalu bisa diakses pada url kalian lalu /refresh
+
+    contoh : http://localhost:8000/api/auth/refresh
+
+    lalu jangan lupa untuk menambahkan key Accept pada headersnya
+    lalu menambahkan value application/json
+
+    hal tersebut juga dapat digunakan dalam logout hanya tinggal accept saja
+
+10. untuk mengakses halaman index yang sudah di paginate 
+http://localhost:8000/api/forums?page=2
+hanya tinggal mengganti page= nya saja
+
+11. resouce adalah cara untuk mengubah nama yang akan ditampikan kepada user (seperti mengubah nama)
+caranya adalah dengan php artisan make:resouce (namanya) 
